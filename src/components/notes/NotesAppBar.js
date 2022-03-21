@@ -1,26 +1,40 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { startSaveEntry } from '../../actions/notes';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { startSaveEntry, startUploadPicture } from "../../actions/notes";
 
 export const NotesAppBar = () => {
-    const dispatch = useDispatch();
-    const {active} = useSelector(state => state.notes);
-    const handleSaveEntry = () => {
-        dispatch(startSaveEntry(active));
-    }
-    return (
-        <div className="notes__appbar">
-            <span>3 de marzo de 2022</span>
+  const dispatch = useDispatch();
+  const { active } = useSelector((state) => state.notes);
+  const handleSaveEntry = () => {
+    dispatch(startSaveEntry(active));
+  };
+  const handlePictureUpload = () => {
+    document.querySelector("#fileSelector").click();
+  };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    dispatch(startUploadPicture(file));
+  };
+  return (
+    <div className="notes__appbar">
+      <span>3 de marzo de 2022</span>
+      <input
+        id="fileSelector"
+        type="file"
+        name="file"
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+      <div>
+        <button className="btn" onClick={handlePictureUpload}>
+          Picture
+        </button>
 
-            <div>
-                <button className="btn">
-                    Picture
-                </button>
-
-                <button className="btn" onClick={handleSaveEntry}>
-                    Save
-                </button>
-            </div>
-        </div>
-    )
-}
+        <button className="btn" onClick={handleSaveEntry}>
+          Save
+        </button>
+      </div>
+    </div>
+  );
+};
